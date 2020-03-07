@@ -76,6 +76,7 @@ size = width, height = 500, 500
 NUM_ROWS = 50
 board_width, board_height = NUM_ROWS, NUM_ROWS
 board = [[0] * (board_width) for _ in range(board_height)]
+sizeBtwn = width // NUM_ROWS
 
 # Colors that will be used in the Visualization
 WHITE = (255, 255, 255)
@@ -85,7 +86,7 @@ SILVER = (192, 192, 192)
 # This function updates the board that is in display
 # By checking over the board 2D array and looking for a 1 
 # If there is a 1 encountered, the display will create a blue rectangle there
-def updateDisplayBoard(window, sizeBtwn):
+def updateDisplayBoard(window):
     for i in range (len(board)):
         for j in range (len(board[i])):
             if board[i][j] == 1:
@@ -93,7 +94,6 @@ def updateDisplayBoard(window, sizeBtwn):
 
 # This function draws the grid of the overall display
 def drawGrid(window):
-    sizeBtwn = width // NUM_ROWS
     x = 0
     y = 0
     for i in range(NUM_ROWS):
@@ -101,7 +101,7 @@ def drawGrid(window):
         y = y + sizeBtwn
         pygame.draw.line(window, SILVER, (x,0), (x,width))
         pygame.draw.line(window, SILVER, (0,y), (width, y))
-    updateDisplayBoard(window, sizeBtwn)
+    updateDisplayBoard(window)
 
 # This function updates the window of the visualization
 def updateWindow(window):
@@ -125,6 +125,10 @@ def main():
                     x, y = pygame.mouse.get_pos()
                     sizeBtwn = width // NUM_ROWS
                     board[y // sizeBtwn][x // sizeBtwn] = 1
+                if event.button == 3:
+                    x, y = pygame.mouse.get_pos()
+                    sizeBtwn = width // NUM_ROWS
+                    board[y // sizeBtwn][x // sizeBtwn] = 0
             elif event.type == pygame.locals.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     play = not play
