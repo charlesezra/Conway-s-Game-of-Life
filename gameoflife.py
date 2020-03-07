@@ -1,8 +1,17 @@
-# Conway's Game of Life
+"""
+    Conway's Game of Life Visualization Project
+    Charles Ezra Cabauatan
+    Description: This project focuses on creating a way to visualize the game of life problem which
+    is structured around overpopulation. This algorithm will attempt to show how the populations will
+    move which depends on the amount of neighbors they have.
+    Technologies: Python and Pygame
+"""
 
+# Necessary Imports for the Project
 import sys, pygame
 import pygame.locals
 
+# --- Main Algorithm for the Project ---
 def gameOfLifeAlgo(old):
     for i in range (len(old)):
         for j in range (len(old[i])):
@@ -55,44 +64,49 @@ def finalUpdate(board, r, c):
     else:
         board[r][c] = 1
 
+# --- Start of the Pygame Implementation ---
 pygame.init()
 
 # Initializing the Size and Screen of the GUI
 size = width, height = 360, 360
-const = 8
-
+const = 10
 bWidth, bHeight = int(width / const), int(height / const)
 board = [[0] * (bWidth) for _ in range(bHeight)]
-
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption('Game of Life')
-white = (255, 255, 255)
-black = (0, 0, 0)
-blue = (0, 0, 205)
-silver = (192, 192, 192)
+
+# Colors that will be used in the Visualization
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+BLUE = (0, 0, 205)
+SILVER = (192, 192, 192)
 
 play = False
 clock = pygame.time.Clock()
+check = 0
 while 1:
-    screen.fill(white)
+    screen.fill(WHITE)
     for event in pygame.event.get():
         if event.type == pygame.QUIT: sys.exit()
-        elif event.type == pygame.MOUSEBUTTONUP:
+        elif event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
-                x, y = event.pos
-                board[int(y/const)][int(x/const)] = 1
+                x, y = pygame.mouse.get_pos()
+                # board[int(y/const)][int(x/const)] = 1
+                pygame.draw.rect(screen, BLUE, (x, y, const, const))
         elif event.type == pygame.locals.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 play = not play
-
-    for i in range (width):
-        for j in range (height):
-            pygame.draw.rect(screen, silver, (i * const, j * const, const, const), 1)
     
-    for i in range (len(board)):
-        for j in range (len(board[i])):
-            if board[i][j] == 1:
-                pygame.draw.rect(screen, blue, (j * const, i * const, const, const))
+    if(check == 0):
+        for i in range (width):
+            for j in range (height):
+                pygame.draw.rect(screen, SILVER, (i * const, j * const, const, const), 1)
+        check = 1
+
+    # for i in range (len(board)):
+    #     for j in range (len(board[i])):
+    #         if board[i][j] == 1:
+    #             pygame.draw.rect(screen, blue, (j * const, i * const, const, const))
 
     pygame.display.flip()
     clock.tick(60)
