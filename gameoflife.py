@@ -8,7 +8,8 @@
 """
 
 # Necessary Imports for the Project
-import sys, pygame
+import sys
+import pygame
 import pygame.locals
 
 # Class for the Main Algorithm that will update the board
@@ -17,19 +18,19 @@ class Algorithm():
         self.board = board
 
     def gameOfLifeAlgo(self) -> None:
-        for i in range (len(self.board)):
-            for j in range (len(self.board[i])):
+        for i in range(len(self.board)):
+            for j in range(len(self.board[i])):
                 self.checkNeighbors(i, j)
 
-        for i in range (len(self.board)):
-            for j in range (len(self.board[i])):
+        for i in range(len(self.board)):
+            for j in range(len(self.board[i])):
                 self.finalUpdate(i, j)
-    
+
     def checkNeighbors(self, row, col) -> None:
         n = [-1, 0, 1]
         count = 0
-        for i in range (3):
-            for j in range (3):
+        for i in range(3):
+            for j in range(3):
                 currY = row + n[i]
                 currX = col + n[j]
                 if currY == -1 and currX == -1:
@@ -60,7 +61,7 @@ class Algorithm():
                 self.board[r][c] = 7
             elif count > 3:
                 self.board[r][c] = 8
-    
+
     def finalUpdate(self, r, c) -> None:
         val = self.board[r][c]
         if val == 2 or val == 3 or val == 5 or val == 6 or val == 8:
@@ -68,6 +69,7 @@ class Algorithm():
         else:
             self.board[r][c] = 1
             self.board[r][c] = 1
+
 
 ''' Start of Pygame Impelementation for the Visualization '''
 
@@ -84,23 +86,28 @@ BLUE = (0, 0, 205)
 SILVER = (192, 192, 192)
 
 # This function updates the board that is in display
-# By checking over the board 2D array and looking for a 1 
+# By checking over the board 2D array and looking for a 1
 # If there is a 1 encountered, the display will create a blue rectangle there
+
+
 def updateDisplayBoard(window):
-    for i in range (len(board)):
-        for j in range (len(board[i])):
+    for i in range(len(board)):
+        for j in range(len(board[i])):
             if board[i][j] == 1:
-                pygame.draw.rect(window, BLUE, (j * sizeBtwn, i * sizeBtwn, sizeBtwn, sizeBtwn))
+                pygame.draw.rect(window, BLUE, (j * sizeBtwn,
+                                                i * sizeBtwn, sizeBtwn, sizeBtwn))
 
 # This function draws the grid of the overall display
+
+
 def drawGrid(window):
     x = 0
     y = 0
     for i in range(NUM_ROWS):
         x = x + sizeBtwn
         y = y + sizeBtwn
-        pygame.draw.line(window, SILVER, (x,0), (x,width))
-        pygame.draw.line(window, SILVER, (0,y), (width, y))
+        pygame.draw.line(window, SILVER, (x, 0), (x, width))
+        pygame.draw.line(window, SILVER, (0, y), (width, y))
     updateDisplayBoard(window)
 
 # This function updates the window of the visualization
@@ -117,29 +124,46 @@ def main():
     flag = True
     play = False
     clock = pygame.time.Clock()
+    left_pressed = None
+    right_pressed = None
     while flag:
         for event in pygame.event.get():
-            if event.type == pygame.QUIT: sys.exit()
+            if event.type == pygame.QUIT:
+                sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    x, y = pygame.mouse.get_pos()
-                    sizeBtwn = width // NUM_ROWS
-                    board[y // sizeBtwn][x // sizeBtwn] = 1
+                    set_position(1)
+                    left_pressed = True
                 if event.button == 3:
-                    x, y = pygame.mouse.get_pos()
-                    sizeBtwn = width // NUM_ROWS
-                    board[y // sizeBtwn][x // sizeBtwn] = 0
+                    set_position(0)
+                    right_pressed = True
+            elif event.type == pygame.MOUSEBUTTONUP:
+                if event.button == 1:  # left button released
+                    left_pressed = False
+                if event.button == 3:  # right button released
+                    right_pressed = False
+            elif event.type == pygame.MOUSEMOTION:
+                if left_pressed:
+                    set_position(1)
+                elif right_pressed:
+                    set_position(0)
             elif event.type == pygame.locals.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     play = not play
-        
-        pygame.time.delay(50)
+
+        pygame.time.delay(20)
         clock.tick(60)
         updateWindow(window)
-        
+
         if play:
+            pygame.time.delay(80)
             algo = Algorithm(board)
             algo.gameOfLifeAlgo()
     pass
+
+def set_position(indicator):
+    x, y = pygame.mouse.get_pos()
+    sizeBtwn = width // NUM_ROWS
+    board[y // sizeBtwn][x // sizeBtwn] = indicator
 
 main()
