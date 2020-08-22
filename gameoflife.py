@@ -88,8 +88,6 @@ SILVER = (192, 192, 192)
 # This function updates the board that is in display
 # By checking over the board 2D array and looking for a 1
 # If there is a 1 encountered, the display will create a blue rectangle there
-
-
 def updateDisplayBoard(window):
     for i in range(len(board)):
         for j in range(len(board[i])):
@@ -98,8 +96,6 @@ def updateDisplayBoard(window):
                                                 i * sizeBtwn, sizeBtwn, sizeBtwn))
 
 # This function draws the grid of the overall display
-
-
 def drawGrid(window):
     x = 0
     y = 0
@@ -151,19 +147,19 @@ def main():
                 if event.key == pygame.K_SPACE:
                     play = not play
 
-        pygame.time.delay(20)
+        pygame.time.delay(1)
         clock.tick(60)
         updateWindow(window)
 
         if play:
-            pygame.time.delay(80)
+            pygame.time.delay(100)
             algo = Algorithm(board)
             algo.gameOfLifeAlgo()
     pass
 
 def set_position(indicator):
     x, y = pygame.mouse.get_pos()
-    sizeBtwn = width // NUM_ROWS
-    board[y // sizeBtwn][x // sizeBtwn] = indicator
+    if(y // sizeBtwn < 50):
+        board[y // sizeBtwn][x // sizeBtwn] = indicator
 
 main()
