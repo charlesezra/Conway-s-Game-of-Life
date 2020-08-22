@@ -13,9 +13,6 @@ This project focuses on the visualization of an algorithm that solves for the Ga
 
 ## How to Use:
 
-#### Start Up:
-<img align="left" alt="StartUp" width="100%" src="https://github.com/charlesezra/Game-of-Life/blob/master/README-images/empty.png?raw=true" />
-
 <ol>
     <li>The project will start with an empty grid that simulates a game board.</li>
     <li>You can click with the left-mouse button to create the blue rectangles which are the cells or population.</li>
